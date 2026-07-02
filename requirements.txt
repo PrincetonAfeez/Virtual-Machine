@@ -1,0 +1,8 @@
+# PVM has no runtime third-party dependencies.
+# Install the package (Python 3.10+ required):
+#
+#   pip install -e .
+#
+# For development tooling, use requirements-dev.txt instead.
+
+-e .
