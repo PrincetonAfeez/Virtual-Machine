@@ -81,17 +81,18 @@ def test_runtime_ip_past_end_with_validation_disabled(monkeypatch):
         vm.run()
 
 
-def test_vm_max_steps_zero_warns(capsys):
+def test_vm_max_steps_zero_warns(caplog):
+    import logging
+
     from pvm.vm import VMConfig
 
+    caplog.set_level(logging.WARNING, logger="pvm.vm")
     VM(
         assemble("func main 0 0\nHALT"),
         config=VMConfig(max_steps=0),
         output=lambda _: None,
     ).run()
-    captured = capsys.readouterr()
-    assert "warning:" in captured.err
-    assert "max_steps is 0" in captured.err
+    assert "max_steps is 0" in caplog.text
 
 
 def test_vm_frame_requires_active_frame():
@@ -104,5 +105,5 @@ def test_vm_frame_requires_active_frame():
 def test_version_is_exported():
     import pvm
 
-    assert pvm.__version__ == "1.0.4"
+    assert pvm.__version__ == "1.0.5"
     assert "__version__" in pvm.__all__

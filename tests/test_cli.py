@@ -164,7 +164,7 @@ def test_cli_version_flag(capsys):
     with pytest.raises(SystemExit) as excinfo:
         main(["--version"])
     assert excinfo.value.code == 0
-    assert "1.0.4" in capsys.readouterr().out
+    assert "1.0.5" in capsys.readouterr().out
 
 
 def test_cli_help_epilog_mentions_entrypoint(capsys):
@@ -184,7 +184,17 @@ def test_cli_module_main_entrypoint():
         text=True,
     )
     assert result.returncode == 0
-    assert "1.0.4" in result.stdout
+    assert "1.0.5" in result.stdout
+
+
+def test_configure_logging_formats_warnings(capsys):
+    import logging
+
+    from pvm.cli import configure_logging
+
+    configure_logging()
+    logging.getLogger("pvm.test").warning("diagnostic message")
+    assert "warning: diagnostic message" in capsys.readouterr().err
 
 
 def test_cli_execute_rejects_unknown_command():

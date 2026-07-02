@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import logging
 import sys
 from pathlib import Path
 
@@ -16,16 +17,27 @@ from .program import Program
 from .validate import validate_program
 from .vm import VM
 
+logger = logging.getLogger(__name__)
+
+
+def configure_logging() -> None:
+    """Send library warnings to stderr in a CLI-friendly format."""
+    logging.basicConfig(
+        level=logging.WARNING,
+        format="warning: %(message)s",
+        stream=sys.stderr,
+        force=True,
+    )
+
 
 def _program_from_path(path: str, *, entrypoint: str | None = None) -> Program:
     path_obj = Path(path)
     if path_obj.suffix.lower() == ".asm":
         return assemble_file(path, entrypoint=entrypoint)
     if entrypoint is not None:
-        print(
-            "warning: --entrypoint applies only when assembling .asm source; "
+        logger.warning(
+            "--entrypoint applies only when assembling .asm source; "
             "using the entrypoint stored in the bytecode file",
-            file=sys.stderr,
         )
     return load_program(path)
 
@@ -154,6 +166,7 @@ def _execute(args: argparse.Namespace) -> int:
 
 
 def main(argv: list[str] | None = None) -> int:
+    configure_logging()
     parser = build_parser()
     args = parser.parse_args(argv)
     try:

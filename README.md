@@ -59,11 +59,13 @@ assemble cleanly and raise a `VMError` at run time.
 ```text
 examples/              sample .asm programs (including deliberate failure demos)
 src/pvm/               assembler, VM, bytecode format, CLI, and validation
+docs/adr/              architecture decision records
 tests/                 pytest suite (23 modules, 387 tests)
 .github/workflows/     CI (ruff, ruff format, mypy, pytest, example smoke test)
 .pre-commit-config.yaml local hooks mirroring CI
 requirements.txt       editable install for runtime (no third-party deps)
-requirements-dev.txt   editable install plus lint, type-check, and test tooling
+requirements-dev.txt   human-maintained dev dependency ranges
+requirements-lock.txt  pinned dev environment for exact reproduction
 pyproject.toml         package metadata and tool configuration
 ```
 
@@ -80,6 +82,20 @@ python -m mypy
 python -m pytest --cov=pvm --cov-report=term-missing --cov-fail-under=95
 ```
 
+For an exact development environment reproduction, use the lockfile instead:
+
+```console
+python -m pip install -r requirements-lock.txt
+```
+
+Keep `requirements-dev.txt` as the human-maintained dependency list; regenerate
+the lockfile after changing dev tooling with:
+
+```console
+python -m pip install -r requirements-dev.txt
+python -m pip freeze > requirements-lock.txt
+```
+
 CI runs on Ubuntu with Python 3.10 through 3.14. Each matrix job lints, type-
 checks, runs the full pytest suite (95% coverage gate), and smoke-tests
 `examples/factorial.asm` through assemble → validate → run.
@@ -87,6 +103,10 @@ checks, runs the full pytest suite (95% coverage gate), and smoke-tests
 The test suite is organized by module: assembler, bytecode, CLI, disassembler,
 errors, format, names, opcodes, program model, validate, VM handlers, and
 example programs under `tests/test_*.py`.
+
+Architecture decisions are recorded under [`docs/adr/`](docs/adr/). ADR 0001
+documents why assembly parsing, bytecode validation, disassembly, and execution
+are kept in separate modules.
 
 ## Demo
 
@@ -354,8 +374,16 @@ configurable limits stop runaway programs: a per-frame operand-stack bound
 `max_call_depth × max_stack_depth`), a call-depth bound that catches infinite
 recursion before Python's own, and a total instruction-step bound
 (`max_steps`, set to `0` to disable) that catches infinite loops which grow
-neither the stack nor the call depth. Setting `max_steps` to `0` emits a
-warning and allows infinite loops to run until externally interrupted.
+neither the stack nor the call depth. Setting `max_steps` to `0` logs a warning
+and allows infinite loops to run until externally interrupted.
+
+### Exit codes
+
+| Code | Meaning |
+|---:|---|
+| 0 | Command completed successfully |
+| 1 | Expected PVM error, such as invalid assembly, invalid bytecode, runtime VM failure, missing file, or unwritable output |
+| 2 | CLI usage error reported by argparse, such as missing required arguments or an unknown command |
 
 ## Known limitations and roadmap
 

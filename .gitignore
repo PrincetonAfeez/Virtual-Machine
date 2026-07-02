@@ -10,6 +10,7 @@ build/
 dist/
 *.bc
 .venv/
+.venv-lock/
 
 # Virtual machine scope documents (local planning only — not part of the release)
 virtual_machine_scope.txt

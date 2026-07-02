@@ -4,6 +4,7 @@
 #   pip install -r requirements-dev.txt
 #
 # This mirrors [project.optional-dependencies].dev in pyproject.toml.
+# For exact pins, use requirements-lock.txt instead.
 
 -e ".[dev]"
 pre-commit>=3.5

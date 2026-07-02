@@ -45,7 +45,7 @@ def test_public_exports_match_all():
 
 
 def test_version_is_exported():
-    assert pvm.__version__ == "1.0.4"
+    assert pvm.__version__ == "1.0.5"
 
 
 def test_main_module_invokes_cli(monkeypatch):
@@ -67,9 +67,9 @@ def test_package_main_entrypoint():
         text=True,
     )
     assert result.returncode == 0
-    assert "1.0.4" in result.stdout
+    assert "1.0.5" in result.stdout
 
 
 def test_reload_preserves_version():
     reloaded = importlib.reload(importlib.import_module("pvm"))
-    assert reloaded.__version__ == "1.0.4"
+    assert reloaded.__version__ == "1.0.5"

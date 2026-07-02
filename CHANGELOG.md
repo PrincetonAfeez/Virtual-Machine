@@ -4,6 +4,17 @@ All notable changes to this project are documented in this file. The format is
 based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this
 project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.5] - 2026-06-19
+
+### Changed
+- `Development Status` classifier set to Beta (portfolio/academic maturity, not
+  production-service claims).
+- VM and CLI diagnostics use `logging` instead of direct `print`; the CLI
+  configures a stderr warning handler so users still see messages.
+- Added ADR 0001 documenting assembler/validator/disassembler/VM separation.
+- Added `requirements-lock.txt` for reproducible development installs.
+- README documents exit codes and the lockfile.
+
 ## [1.0.4] - 2026-06-19
 
 ### Fixed
@@ -109,6 +120,7 @@ Initial release.
   only.
 - Bytecode validation rejects non-ASCII function and entrypoint names.
 
+[1.0.5]: #105---2026-06-19
 [1.0.4]: #104---2026-06-19
 [1.0.3]: #103---2026-06-19
 [1.0.2]: #102---2026-06-19

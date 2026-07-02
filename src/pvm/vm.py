@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 import sys
 from collections import Counter
 from collections.abc import Callable
@@ -22,6 +23,8 @@ from .errors import (
 from .opcodes import OpCode, decode_instruction, iter_instructions
 from .program import Program, Value
 from .validate import validate_program
+
+logger = logging.getLogger(__name__)
 
 OutputFunction = Callable[[object], None]
 
@@ -121,9 +124,8 @@ class VM:
         if self.config.max_steps < 0:
             raise VMError("max_steps cannot be negative")
         if self.config.max_steps == 0:
-            print(
-                "warning: max_steps is 0; infinite loops will not be stopped",
-                file=sys.stderr,
+            logger.warning(
+                "max_steps is 0; infinite loops will not be stopped",
             )
 
         entry = self.program.functions[self.program.entrypoint]

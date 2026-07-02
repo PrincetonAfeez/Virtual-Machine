@@ -57,6 +57,9 @@ def test_program_from_path_loads_bytecode(tmp_path):
 
 
 def test_program_from_path_warns_on_bytecode_entrypoint(tmp_path, capsys):
+    from pvm.cli import configure_logging
+
+    configure_logging()
     path = tmp_path / "p.bc"
     save_program(assemble("func boot 0 0\nHALT\n", entrypoint="boot"), str(path))
     _program_from_path(str(path), entrypoint="main")
