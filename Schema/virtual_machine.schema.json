@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "VirtualMachine",
+  "type": "object",
+  "required": ["name", "osType", "cpuCores", "memoryMb", "storageGb", "status"],
+  "properties": {
+    "id": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 150
+    },
+    "osType": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "cpuCores": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "memoryMb": {
+      "type": "integer",
+      "minimum": 512
+    },
+    "storageGb": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": ["running", "stopped", "paused", "error"]
+    },
+    "ownerId": {
+      "type": ["integer", "null"],
+      "minimum": 1
+    }
+  },
+  "additionalProperties": false
+}

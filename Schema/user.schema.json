@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "User",
+  "type": "object",
+  "required": ["username", "email"],
+  "properties": {
+    "id": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "username": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 100
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "maxLength": 255
+    }
+  },
+  "additionalProperties": false
+}
