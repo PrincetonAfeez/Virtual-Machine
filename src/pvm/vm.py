@@ -29,6 +29,14 @@ logger = logging.getLogger(__name__)
 OutputFunction = Callable[[object], None]
 
 
+def _default_output(value: object) -> None:
+    sys.stdout.write(f"{value}\n")
+
+
+def _default_trace_output(line: object) -> None:
+    sys.stderr.write(f"{line}\n")
+
+
 @dataclass(slots=True)
 class VMConfig:
     max_stack_depth: int = 1024
@@ -54,7 +62,7 @@ class VM:
         program: Program,
         *,
         config: VMConfig | None = None,
-        output: OutputFunction = print,
+        output: OutputFunction = _default_output,
         trace: bool = False,
         trace_output: OutputFunction | None = None,
     ) -> None:
@@ -65,7 +73,7 @@ class VM:
         if trace_output is not None:
             self.trace_output = trace_output
         elif trace:
-            self.trace_output = lambda line: print(line, file=sys.stderr)
+            self.trace_output = _default_trace_output
         else:
             self.trace_output = output
         self.frames: list[Frame] = []

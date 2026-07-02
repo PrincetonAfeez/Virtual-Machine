@@ -11,6 +11,16 @@ from pvm.errors import (
 from pvm.vm import VM, VMConfig
 
 
+def test_default_output_writes_to_stdout(capsys):
+    VM(assemble("func main 0 0\nLOAD_CONST 1\nPRINT\nHALT")).run()
+    assert capsys.readouterr().out == "1\n"
+
+
+def test_default_trace_writes_to_stderr(capsys):
+    VM(assemble("func main 0 0\nLOAD_CONST 1\nHALT"), trace=True).run()
+    assert "TRACE" in capsys.readouterr().err
+
+
 @pytest.mark.parametrize(
     ("left", "right", "expected"),
     [
