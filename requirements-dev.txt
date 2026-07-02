@@ -1,0 +1,9 @@
+# Development dependencies for PVM (Python 3.10+).
+# Install with:
+#
+#   pip install -r requirements-dev.txt
+#
+# This mirrors [project.optional-dependencies].dev in pyproject.toml.
+
+-e ".[dev]"
+pre-commit>=3.5
